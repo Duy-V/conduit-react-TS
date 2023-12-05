@@ -4,10 +4,11 @@ import Navbar, { MobileNav } from "@material-tailwind/react/components/Navbar";
 import Typography from "@material-tailwind/react/components/Typography";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { useUser } from "../stores/user";
+import {If, Else, Then} from "react-if"
 function Header() {
   const [openNav, setOpenNav] = useState(false);
-
+const isLoggedIn = useUser((store) => store.isLoggedin)
   useEffect(() => {
     window.addEventListener(
       "resize",
@@ -27,6 +28,9 @@ function Header() {
           </Typography>
           <div className="flex items-center gap-4 text-blue-gray-900">
             <div className="flex items-center gap-x-1">
+          <If condition={isLoggedIn}>
+          <Then>
+         
               <Button
                 variant="text"
                 size="sm"
@@ -34,8 +38,33 @@ function Header() {
               >
                 <Link to={`/`}>Home</Link>
               </Button>
-
+<Button
+                variant="text"
+                size="sm"
+                className="hidden lg:inline-block"
+              >
+                <Link to={`login`}>Settings</Link>
+              </Button>
               <Button
+                variant="text"
+                size="sm"
+                className="hidden lg:inline-block"
+              >
+                <Link to={`signup`}>Profile</Link>
+              </Button>              
+
+              
+           
+          </Then>
+          <Else>
+           <Button
+                variant="text"
+                size="sm"
+                className="hidden lg:inline-block"
+              >
+                <Link to={`/`}>Home</Link>
+              </Button>
+<Button
                 variant="text"
                 size="sm"
                 className="hidden lg:inline-block"
@@ -48,23 +77,12 @@ function Header() {
                 className="hidden lg:inline-block"
               >
                 <Link to={`signup`}>SignUp</Link>
-              </Button>
+              </Button>              
 
-              {/* <Button
-                variant="text"
-                size="sm"
-                className="hidden lg:inline-block"
-              >
-                <span>Log In</span>
-              </Button>
-              <Button
-                variant="gradient"
-                size="sm"
-                className="hidden lg:inline-block"
-              >
-                <span>Sign in</span>
-              </Button> */}
-            </div>
+              
+          </Else>
+          </If>
+          
             <IconButton
               variant="text"
               className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -102,7 +120,8 @@ function Header() {
                 </svg>
               )}
             </IconButton>
-          </div>
+         
+        </div>
         </div>
         <MobileNav open={openNav} className="text-blue-gray-900">
           <div className="flex items-center gap-x-1">

@@ -1,5 +1,6 @@
 import PopularTag from "../components/Tags";
 import CardList from "../components/CardList";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 
 function App() {
   return (

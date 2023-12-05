@@ -10,27 +10,32 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { useUserLogin } from "../hooks/useUserLogin";
+import { useNavigate } from "react-router";
+import { useUser } from "../stores/user";
 
 export function LoginCard() {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-  const {mutate: $login} = useUserLogin()
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>)=>{
-e.preventDefault();
-$login(form, {
-  onSuccess: ()=>{
-    alert("Login in success")
-    //1. Save token in localStorage
-    //2. redirect to Home page
-    //3. update state of user
-  },
-  onError:()=>{
-
-  }
-})
-  }
+  const { mutate: $login } = useUserLogin();
+  const navigate = useNavigate();
+  const setLoggedIn = useUser((store) => store.setLoggedIn);
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    $login(form, {
+      onSuccess: (response) => {
+        alert("Login in success");
+        //1. Save token in localStorage
+        window.localStorage.setItem("conduit_jwt_token", response.token);
+        //2. redirect to Home page
+        navigate("/");
+        //3. update state of user
+        setLoggedIn(true);
+      },
+      onError: () => {},
+    });
+  };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
       <Card className="w-96">
